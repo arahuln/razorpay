@@ -31,8 +31,8 @@ In Render dashboard, go to **Environment** tab and add:
 ```env
 NODE_ENV=production
 PORT=3000
-RAZORPAY_KEY_ID=rzp_test_9ZFnsvfH5g8tnb
-RAZORPAY_KEY_SECRET=opCsikAwcm01oSdRSUhEEZrQ
+RAZORPAY_KEY_ID=rzp_test_gYowpjeZKdnDNc
+RAZORPAY_KEY_SECRET=7FHB8nYjATiC0yaFnLl8AXDi
 RAZORPAY_WEBHOOK_SECRET=your_webhook_secret_here
 ```
 
