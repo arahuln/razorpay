@@ -68,30 +68,36 @@ export class PaymentController {
   // Verify payment signature
   async verifySignature(req: Request, res: Response): Promise<void> {
     try {
-      // Map Razorpay field names to internal names
       const {
-        razorpay_payment_id: payment_id,
-        razorpay_order_id: order_id,
-        razorpay_signature: signature,
+        razorpay_payment_id,
+        razorpay_order_id,
+        razorpay_signature,
+        payment_id,
+        order_id,
+        signature,
         webhook_data,
         provider
       } = req.body;
 
-      // Validate required fields
-      if (!payment_id || !order_id || !signature) {
+      // ✅ Normalize the fields to support both frontend styles
+      const paymentId = razorpay_payment_id || payment_id;
+      const orderId = razorpay_order_id || order_id;
+      const sig = razorpay_signature || signature;
+
+      if (!paymentId || !orderId || !sig) {
         res.status(400).json({
           success: false,
-          error: 'Missing required fields: razorpay_payment_id, razorpay_order_id, razorpay_signature',
+          error: 'Missing required fields: paymentId, orderId, signature',
         });
         return;
       }
 
-      logger.info(`Verifying payment: ${payment_id}, order: ${order_id}`);
+      logger.info(`Verifying payment: ${paymentId}, order: ${orderId}`);
 
       const verification = await this.paymentService.verifyPayment(
-        payment_id,
-        order_id,
-        signature,
+        paymentId,
+        orderId,
+        sig,
         webhook_data,
         provider
       );
