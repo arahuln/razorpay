@@ -71,15 +71,14 @@ export class RazorpayStrategy implements PaymentStrategy {
     try {
       logger.info(`Verifying Razorpay payment: ${request.paymentId}`);
 
-      // Verify webhook signature
-      const isValidSignature = this.verifyWebhookSignature(
-        request.paymentId,
-        request.orderId,
-        request.signature,
-        request.webhookData
-      );
+      // Verify payment signature using Razorpay's signature rule
+      const bodyToSign = `${request.orderId}|${request.paymentId}`;
+      const expectedSignature = crypto
+        .createHmac('sha256', config.razorpay.keySecret)
+        .update(bodyToSign)
+        .digest('hex');
 
-      if (!isValidSignature) {
+      if (expectedSignature !== request.signature) {
         logger.warn(`Invalid signature for payment: ${request.paymentId}`);
         return {
           isValid: false,
@@ -184,9 +183,9 @@ export class RazorpayStrategy implements PaymentStrategy {
       // Create the signature string
       const signatureString = `${orderId}|${paymentId}`;
       
-      // Generate expected signature
+      // Generate expected signature using key secret (not webhook secret)
       const expectedSignature = crypto
-        .createHmac('sha256', this.webhookSecret)
+        .createHmac('sha256', config.razorpay.keySecret)
         .update(signatureString)
         .digest('hex');
 

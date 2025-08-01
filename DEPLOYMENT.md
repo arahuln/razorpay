@@ -33,7 +33,7 @@ NODE_ENV=production
 PORT=3000
 RAZORPAY_KEY_ID=rzp_test_gYowpjeZKdnDNc
 RAZORPAY_KEY_SECRET=7FHB8nYjATiC0yaFnLl8AXDi
-RAZORPAY_WEBHOOK_SECRET=your_webhook_secret_here
+RAZORPAY_WEBHOOK_SECRET=whsec_render_test_2025
 ```
 
 ### 4. Deploy
