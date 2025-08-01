@@ -48,11 +48,11 @@ export class RazorpayStrategy implements PaymentStrategy {
 
       return {
         orderId: order.id,
-        amount: request.amount,
+        amount: request.amount, // Keep as rupees (not paise)
         currency: request.currency,
         receipt: request.receipt,
         status: order.status,
-        providerOrderId: order.id,
+        providerOrderId: order.id, // Razorpay order ID
         createdAt: new Date(),
       };
     } catch (error) {
