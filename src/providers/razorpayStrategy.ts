@@ -14,14 +14,12 @@ import {
 
 export class RazorpayStrategy implements PaymentStrategy {
   private razorpay: Razorpay;
-  private webhookSecret: string;
 
   constructor() {
     this.razorpay = new Razorpay({
       key_id: config.razorpay.keyId,
       key_secret: config.razorpay.keySecret,
     });
-    this.webhookSecret = config.razorpay.webhookSecret;
   }
 
   async createOrder(request: CreateOrderRequest): Promise<CreateOrderResponse> {
@@ -171,32 +169,5 @@ export class RazorpayStrategy implements PaymentStrategy {
 
   isAvailable(): boolean {
     return !!(config.razorpay.keyId && config.razorpay.keySecret);
-  }
-
-  private verifyWebhookSignature(
-    paymentId: string,
-    orderId: string,
-    signature: string,
-    _webhookData?: Record<string, any>
-  ): boolean {
-    try {
-      // Create the signature string
-      const signatureString = `${orderId}|${paymentId}`;
-      
-      // Generate expected signature using key secret (not webhook secret)
-      const expectedSignature = crypto
-        .createHmac('sha256', config.razorpay.keySecret)
-        .update(signatureString)
-        .digest('hex');
-
-      // Compare signatures
-      return crypto.timingSafeEqual(
-        Buffer.from(signature, 'hex'),
-        Buffer.from(expectedSignature, 'hex')
-      );
-    } catch (error) {
-      logger.error(`Error verifying webhook signature: ${error}`);
-      return false;
-    }
   }
 } 
