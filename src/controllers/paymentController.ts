@@ -47,12 +47,13 @@ export class PaymentController {
       res.status(201).json({
         success: true,
         data: {
-          providerOrderId: order.providerOrderId, // Razorpay order ID
-          amount: order.amount,                   // in rupees (not paise)
-          currency: order.currency,               // e.g., "INR"
-          receipt: order.receipt,                 // the original receipt ID
-          status: order.status                    // Razorpay order status ("created")
-        },
+          providerOrderId: order.providerOrderId,
+          amount: order.amount,
+          currency: order.currency,
+          receipt: order.receipt,
+          status: order.status,
+          createdAt: order.createdAt
+        }
       });
     } catch (error) {
       logger.error(`Error in createOrder: ${error}`);

@@ -47,12 +47,11 @@ export class RazorpayStrategy implements PaymentStrategy {
       logger.info(`Razorpay order created successfully: ${order.id}`);
 
       return {
-        orderId: order.id,
+        providerOrderId: order.id,
         amount: request.amount, // Keep as rupees (not paise)
         currency: request.currency,
         receipt: request.receipt,
         status: order.status,
-        providerOrderId: order.id, // Razorpay order ID
         createdAt: new Date(),
       };
     } catch (error) {

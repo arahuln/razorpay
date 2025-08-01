@@ -9,12 +9,12 @@ export interface CreateOrderRequest {
 
 // Payment order response
 export interface CreateOrderResponse {
-  orderId: string;
+  orderId?: string; // Optional for backward compatibility
   amount: number;
   currency: string;
   receipt: string;
   status: string;
-  providerOrderId?: string;
+  providerOrderId: string; // Primary field for Razorpay order ID
   createdAt: Date;
 }
 

@@ -57,7 +57,7 @@ export class PaymentService {
         metadata,
       });
       
-      logger.info(`Payment order created successfully: ${response.orderId}`);
+      logger.info(`Payment order created successfully: ${response.providerOrderId}`);
       return response;
     } catch (error) {
       logger.error(`Failed to create payment order: ${error}`);
