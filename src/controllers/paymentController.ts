@@ -72,6 +72,7 @@ export class PaymentController {
         razorpay_payment_id,
         razorpay_order_id,
         razorpay_signature,
+        razorpay_signatured, // Handle the typo in your request
         payment_id,
         order_id,
         signature,
@@ -80,7 +81,7 @@ export class PaymentController {
       } = req.body;
 
       // ✅ Normalize the fields to support both frontend styles
-      const paymentId = razorpay_payment_id || payment_id;
+      const paymentId = razorpay_payment_id || razorpay_signatured || payment_id;
       const orderId = razorpay_order_id || order_id;
       const sig = razorpay_signature || signature;
 
@@ -88,11 +89,16 @@ export class PaymentController {
         res.status(400).json({
           success: false,
           error: 'Missing required fields: paymentId, orderId, signature',
+          received: {
+            paymentId: paymentId || 'missing',
+            orderId: orderId || 'missing',
+            signature: sig || 'missing'
+          }
         });
         return;
       }
 
-      logger.info(`Verifying payment: ${paymentId}, order: ${orderId}`);
+      logger.info(`Verifying payment: ${paymentId}, order: ${orderId}, signature: ${sig.substring(0, 20)}...`);
 
       const verification = await this.paymentService.verifyPayment(
         paymentId,
